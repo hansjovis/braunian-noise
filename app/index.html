@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="braunianApp">
+	<!-- Index page of the website. -->
+	<head>
+		<!-- Meta info. -->
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<title>Braunian Noise</title> 
+		<!-- CSS-files. -->
+		<!-- build:css styles/main.css -->
+		<link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+		<link href="../bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+		<!-- <link href="../bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet"> -->
+		<link href="fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+		<link href="styles/jumbotron-narrow.css" rel="stylesheet">
+		<link href="styles/braunian_noise.css" rel="stylesheet">
+		<!-- endbuild -->		
+	</head>
+	<body>
+		<div class="container">
+			<!-- These elements will be populated with the required html-code at runtime. -->
+			<div ui-view="header"></div>
+			<div class="row row-content">
+				<div class="col-sm-3" ui-view="navigation"></div>
+				<div class="col-sm-9" ui-view="content"></div>
+			</div>			
+			<div ui-view="footer"></div>
+		</div>
+	
+		<!-- Include all the neccessary (Angular) Javascript files. -->
+		<!-- build:js scripts/main.js -->	
+		<script src="../bower_components/angular/angular.js"></script>
+		<script src="../bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+		<script src="../bower_components/angular-resource/angular-resource.min.js"></script>
+		<script src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+		<script src="../bower_components/angular-cookies/angular-cookies.min.js"></script>
+		<script src="scripts/app.js"></script>
+		<script src="scripts/controllers.js"></script>
+		<script src="scripts/services.js"></script>	
+		<!-- endbuild -->
+	
+	</body>
+</html>

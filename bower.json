@@ -1,0 +1,36 @@
+{
+  "name": "braunian-noise",
+  "version": "1.0.0",
+  "description": "A blog about AI, art, games and more.",
+  "main": "index.html",
+  "moduleType": [],
+  "keywords": [
+    "BraunianNoise",
+    "Personal Website"
+  ],
+  "authors": [
+    "Hans-Christiaan Braun"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "font-awesome": "^4.4.0",
+    "angular": "^1.4.7",
+    "angular-route": "^1.5.8",
+    "angular-ui-router": "^0.3.1",
+    "angular-resource": "^1.5.8",
+    "angular-sanitize": "^1.5.8",
+    "angular-cookies": "^1.5.8"
+  },
+  "resolutions": {
+    "angular": "1.5.8"
+  }
+}

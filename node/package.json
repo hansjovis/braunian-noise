@@ -1,0 +1,17 @@
+{
+	"name": "node-braunian",
+	"description": "Node code for H.Braun's own personal blog.",
+	"version": "0.0.1",
+	"licence": "MIT",
+	"author": {
+		"name": "Hans-Christiaan Braun",
+		"email": "hc.braun.93@gmail.com"
+	},
+	"dependencies": {
+		"body-parser"    : "^1.4.3",
+		"express"        : "^4.13.4",
+		"method-override": "^2.1.3",
+		"mongoose"       : "^4.4.12",
+		"morgan"         : "^1.1.1"
+	}
+}
