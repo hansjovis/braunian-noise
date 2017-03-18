@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en" ng-app="braunianApp">
+	<head>
+	
+		<title>Braunian Noise.</title>	
+	
+		<!-- META TAGS -->
+		<meta charset="utf-8">
+		<!-- Optimize mobile viewport -->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<!-- STYLESHEETS -->
+		<!-- Bootstrap, Font-Awesome, Braunian-Noise -->
+		<!-- build:css styles/main.css -->
+		<link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+		<link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap-theme.min.css">		
+		<link rel="stylesheet" href="styles/braunian-noise/braunian-noise.css">
+		<link rel="stylesheet" href="styles/jumbotron-narrow.css">
+		<!-- endbuild -->
+		
+		<!-- build:css styles/font-awesome.css -->
+		<link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.css">
+		<!-- endbuild -->
+		
+		<!-- Include all the neccessary (Angular) Javascript files. -->
+		
+		<!-- build:js scripts/libs.js -->	
+		<script src="../bower_components/angular/angular.min.js"></script>
+		<script src="../bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+		<script src="../bower_components/angular-resource/angular-resource.min.js"></script>
+		<script src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+		<script src="../bower_components/angular-cookies/angular-cookies.min.js"></script>
+		<!-- endbuild -->	
+		
+		<!-- build:js scripts/app-main.js -->
+		<script src="scripts/app.js"></script>
+		
+		<script src="scripts/controllers.js"></script>
+		<script src="scripts/post-list-controller.js"></script>
+		<script src="scripts/navigation-controller.js"></script>
+		
+		<script src="scripts/services.js"></script>	
+		<script src="scripts/login-service.js"></script>	
+		<!-- endbuild -->
+	</head>
+	<body>
+		<div class="container">
+			<!-- These elements will be populated with the required html-code at runtime. -->
+			<div ui-view="header"></div>
+			<div ui-view="whole-page">
+				<div class="row row-content">
+					<div class="col-sm-1" style="min-width: 250px;" ui-view="navigation"></div>
+					<div class="col-sm-9" ui-view="content"></div>
+				</div>		
+			</div>
+			<div ui-view="footer"></div>
+		</div>
+	
+
+	
+	</body>
+</html>

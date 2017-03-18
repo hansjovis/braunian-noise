@@ -1,0 +1,17 @@
+
+<!--
+	This is a view template for a single post.
+-->
+
+<div>
+	<!-- Big header image. -->
+	<div class="post-image">
+		<img src="{{post.header_img}}" width="100%"></img>
+		<!-- Title area. -->
+		<h1 class="post-title">{{post.title}}</h1>
+	</div>	
+	<!-- Post contents. Is different for each post. -->
+	<div>
+		<div ng-bind-html="post.content"></div>
+	</div>
+</div>
