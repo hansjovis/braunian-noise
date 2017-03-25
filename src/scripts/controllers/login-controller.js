@@ -1,0 +1,48 @@
+/**
+ *	Controller Template.
+ *	 
+ *	[Controller description]
+ */
+
+var LoginController = function($scope, $stateParams, $state, loginService) {
+	
+	// Entered credentials.
+	$scope.credentials = {
+		username: "",
+		password: ""
+	};
+	
+	// Current error that should be shown to the user,
+	// e.g. "Wrong username or password."
+	$scope.error = $stateParams.error;
+	
+	/**
+	 *	Log-in function.
+	 */
+	$scope.login = function() {
+		console.log('Logging in!');
+		console.log($scope.credentials);
+		
+		// Log-in using the login service.
+		loginService.login($scope.credentials,
+			// Function to execute after succesful log-in.
+			function(username) {
+				// Go to the blog-post list.
+				$state.go('app.posts_category', 'all_posts');
+			},
+			// Function to execute after unsuccesful log-in.
+			function(response) {
+				// Go back to the login page, but show an error.
+				$state.go('app.login',{ error : "Wrong user name or password." });
+			}
+		
+		);					
+	};
+	
+};
+
+// Register the controller.
+angular.module('braunianApp').controller('LoginController', LoginController);
+
+// Inject the relevant factories and services.
+LoginController.$inject = ['$scope', '$stateParams', '$state', 'loginService'];

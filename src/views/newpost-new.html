@@ -12,7 +12,10 @@
 					<div class="form-group row">
 						<label for="post_img_input" class="col-xs-2 col-form-label"> Header </label>
 						<div class="col-xs-9">
-							<input name="post_img_input" id="post_img_input" type="file" class="form-control-file col-lg-9" aria-label="Title"></input>
+							<input 
+								name="post_img_input" id="post_img_input" 
+								type="file" class="form-control-file col-lg-9" aria-label="Title">
+							</input>
 							<button ng-click="upload_header_img()" class="btn btn-default col-lg-3 pull-right">Upload</button>
 						</div>
 					</div>
@@ -28,15 +31,20 @@
 					<label>Content</label>
 					<div class="panel panel-primary">
 						<div class="panel-body">
-							<select class="custom-select">
-								<option value="text">text</option>
-								<option value="text">image</option>
-								<option value="text">text - image</option>
-								<option value="text">image - text</option>							
-							</select>
-							<a class="btn btn-primary">
-								Add Row
-							</a>
+							<div ng-repeat="content in post.contents">
+								<div ng-switch="content.type">
+									<div ng-switch-when="text">
+										<textarea class="form-control" style="width: 100%; padding: 10px;"> </textarea>
+									</div>
+								</div>
+							</div>
+							<div>
+								<select class="custom-select" ng-model="current_row_type" ng-options="row_type for row_type in row_types">					
+								</select>
+								<a class="btn btn-primary" ng-click="add_row()">
+									Add Row
+								</a>
+							</div>
 						</div>
 					</div>
 				
@@ -54,10 +62,15 @@
 		<div class="col-sm-6">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
-					<h3 class="panel-title">Preview</h3>
+					<h3 class="panel-title">Preview: {{post.title}}</h3>
 				</div>
 				<div class="panel-body">
-				
+					<!-- Big header image. -->
+					<div class="post-image">
+						<img id="header_image" src="{{default_header_img_url}}" style="filter: blur(5px);" width="100%"></img>
+						<!-- Title area. -->
+						<h1 class="post-title" style="font-size: 30px;"><b>{{post.title}}</b></h1>
+					</div>
 				</div>
 			</div>
 		</div>

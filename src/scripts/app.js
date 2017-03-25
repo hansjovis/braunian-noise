@@ -115,14 +115,15 @@ angular.module('braunianApp', ['ui.router','ngResource','ngSanitize','ngCookies'
 				
 			})
 			
-			.state('app.new-post-new', {
-				url: 'new-post-new',
+			.state('app.new-post', {
+				url: 'new-post',
 				views: {
 					'header': {
                         templateUrl : 'views/header.html'
                     },
 					'whole-page@': {
-						templateUrl : 'views/newpost-new.html'
+						templateUrl : 'views/newpost-new.html',
+						controller : 'NewPostController'
 					},
                     'footer': {
                         templateUrl : 'views/footer.html'
