@@ -115,14 +115,15 @@ angular.module('braunianApp', ['ui.router','ngResource','ngSanitize','ngCookies'
 				
 			})
 			
-			.state('app.new-post-new', {
-				url: 'new-post-new',
+			.state('app.new-post', {
+				url: 'new-post',
 				views: {
 					'header': {
                         templateUrl : 'views/header.html'
                     },
 					'whole-page@': {
-						templateUrl : 'views/newpost-new.html'
+						templateUrl : 'views/newpost-new.html',
+						controller : 'NewPostController'
 					},
                     'footer': {
                         templateUrl : 'views/footer.html'
@@ -192,121 +193,166 @@ angular.module('braunianApp')
 				$scope.post = postFactory.getPost($stateParams.id);
 				
 			}
-		])
-		
-		// Login controller
-		.controller('LoginController', ['$scope', '$stateParams', '$state', 'loginService', function($scope, $stateParams, $state, $loginService) {
-			
-			$scope.credentials = {
-				username: "",
-				password: ""
-			}
-			
-			$scope.error = $stateParams.error;
-			
-			$scope.login = function() {
-					console.log('Logging in!');
-					console.log($scope.credentials);
-					
-					$loginService.login($scope.credentials,
-						
-						function(username) {
-							$state.go('app.posts_category', 'all_posts');
-						},
-						
-						function(response) {
-							$state.go('app.login',{ error : "Wrong user name or password." });
-						}
-					
-					);					
-				}
-			}	
-		])
-		
-		// New post controller
-		.controller('NewPostController', ['$scope', '$stateParams', '$http',
-			function($scope, $stateParams, $http) {
-				$scope.categories = [
-					{
-						name: 'Music',
-						icon: 'fa-music',
-						num_posts: 3,
-						description: 'All posts about music!'
-					},
-					{
-						name: '3D',
-						icon: 'fa-cube',
-						num_posts: 4,
-						description: 'All 3D things.'
-					},
-					{
-						name: '2D',
-						icon: 'fa-picture-o',
-						num_posts: 2,
-						description: 'All 2D things.'
-					},
-					{
-						name: 'Programming',
-						icon: 'fa-terminal',
-						num_posts: 5,
-						description: 'Programming stuff'
-					},
-					{
-						name: 'Games',
-						icon: 'fa-gamepad',
-						num_posts: 2,
-						description: 'Game stuff'
-					},
-					{
-						name: 'Books',
-						icon: 'fa-book',
-						num_posts: 5,
-						description: 'Book stuff'
-					}				
-				];
-				
-				$scope.post = {
-						id: 0,
-						title: "",
-						header_img: "images/Sample/placeholder-image600x300.jpg",
-						categories: [],
-						author:	"",
-						created_on: "",
-						likes: 0,
-						contents: ""
-					}
-				
-				$scope.preview = false;
-				
-				$scope.upload_header_img = function() {
-					var f = document.getElementById('post_img_input').files[0];
-										
-					var r = new FileReader();
-					r.onloadend = function(e) {
-						console.log("uploaded header image!");
-					}
-					
-					r.readAsBinaryString(f);
-				}
-				
-				$scope.upload_post = function() {
-					console.log('uploading post!');
-					$http.post('http://localhost:8080/api/upload-post', $scope.post).then(
-						function(response) {
-							console.log("Blog post succesfully uploaded!");
-							console.log(response);
-						}, 
-						function(response) {
-							console.log("ERROR posting post");
-							console.log(response);							
-						});
-				}
-				
-				
-			}		
-		])
+		])			
 ;
 
+/**
+ *	Controller Template.
+ *	 
+ *	[Controller description]
+ */
+
+var LoginController = function($scope, $stateParams, $state, loginService) {
+	
+	// Entered credentials.
+	$scope.credentials = {
+		username: "",
+		password: ""
+	};
+	
+	// Current error that should be shown to the user,
+	// e.g. "Wrong username or password."
+	$scope.error = $stateParams.error;
+	
+	/**
+	 *	Log-in function.
+	 */
+	$scope.login = function() {
+		console.log('Logging in!');
+		console.log($scope.credentials);
+		
+		// Log-in using the login service.
+		loginService.login($scope.credentials,
+			// Function to execute after succesful log-in.
+			function(username) {
+				// Go to the blog-post list.
+				$state.go('app.posts_category', 'all_posts');
+			},
+			// Function to execute after unsuccesful log-in.
+			function(response) {
+				// Go back to the login page, but show an error.
+				$state.go('app.login',{ error : "Wrong user name or password." });
+			}
+		
+		);					
+	};
+	
+};
+
+// Register the controller.
+angular.module('braunianApp').controller('LoginController', LoginController);
+
+// Inject the relevant factories and services.
+LoginController.$inject = ['$scope', '$stateParams', '$state', 'loginService'];
+/**
+ *	Controller Template.
+ *	 
+ *	[Controller description]
+ */
+var NewPostController = function($scope) {
+	
+	// Mockup of the categories, will be replaced with a call to the backend.
+	$scope.categories = [
+		{
+			name: 'Music',
+			icon: 'fa-music',
+			num_posts: 3,
+			description: 'All posts about music!'
+		},
+		{
+			name: '3D',
+			icon: 'fa-cube',
+			num_posts: 4,
+			description: 'All 3D things.'
+		},
+		{
+			name: '2D',
+			icon: 'fa-picture-o',
+			num_posts: 2,
+			description: 'All 2D things.'
+		},
+		{
+			name: 'Programming',
+			icon: 'fa-terminal',
+			num_posts: 5,
+			description: 'Programming stuff'
+		},
+		{
+			name: 'Games',
+			icon: 'fa-gamepad',
+			num_posts: 2,
+			description: 'Game stuff'
+		},
+		{
+			name: 'Books',
+			icon: 'fa-book',
+			num_posts: 5,
+			description: 'Book stuff'
+		}				
+	];
+	
+	$scope.default_header_img_url = "images/Sample/placeholder-image600x300.jpg";
+	
+	$scope.row_types = ["text", "header 1", "header 2", "text - image", "image", "image - text"];
+	$scope.current_row_type = "text";
+	$scope.current_row_id = 0;
+	
+	// Model of the current post, for two-way databinding purposes.
+	$scope.post = {
+		id: 0,
+		title: "",
+		header_img: {},
+		categories: [],
+		author:	"",
+		created_on: "",
+		likes: 0,
+		contents: []
+	}
+	
+	$scope.upload_header_img = function() {
+		var file = document.getElementById('post_img_input').files[0];
+					
+		document.getElementById('header_image').src = window.URL.createObjectURL(file);
+					
+		console.log(file);
+	}
+	
+	$scope.add_row = function() {
+		console.log($scope.current_row_type);
+		
+		var new_row = {};
+		$scope.current_row_id++;
+		
+		switch($scope.current_row_type) {
+			
+			case "text":
+					new_row = {
+						id: $scope.current_row_id,
+						type: "text", 
+						text: ""
+					};				
+				break;
+			case "header 1":
+					new_row = {
+						id: $scope.current_row_id,
+						type: "header 1",
+						text: ""
+					};
+				break;
+			default:
+				break;
+		};
+		
+		$scope.post.contents.push(new_row);
+	}
+	
+};
+
+// Register the controller.
+angular.module('braunianApp').controller('NewPostController', NewPostController);
+
+// Inject the relevant factories and services.
+NewPostController.$inject = ['$scope'];
 /**
  *	Post List Controller
  *
@@ -542,28 +588,41 @@ angular.module('braunianApp')
 ;
 
 
-
+/**
+ *	Service for logging into the Braunian Noise website.
+ */
 var LoginService = function($http, $state, $cookies) {
 	
+	/**
+	 *	Primary login function.
+	 * 		@param {object} credentials the entered credentials as an object in the form: { username: "username", password: "password"}
+	 *		@param {function} onSuccess(username) the function to be executed after succesfuly logging in.
+	 *		@param {function} onError(response) the function to be executed after unsuccessfuly trying to log in.
+	 */
 	this.login = function(credentials, onSuccess, onError) {
-		
+		// Try to login on the server using the given credentials.
 		$http.post('http://localhost:8080/api/login', credentials).then(
-		
+			// When succesfull
 			function(response) {				
 				if(response.data.name) {
-					
+					// Simple session storage using a cookie,
+					// stores the user's name.
 					$cookies.put('bn-user', response.data.name);
-										
+					// Execute the success function.					
 					onSuccess(response.data.name);
 				}					
 			}, 
-			
+			// When not...
 			function(response) {
-								
+				// Execute the error function.				
 				onError(response);
 		});
 	}
 	
+	/**
+	 *	Get the currently logged in user, when available.
+	 *	@returns {string} the username of the currently logged in user, null if no user is currently logged in. 
+	 */
 	this.loggedInUser = function() {
 		
 		if($cookies.get('bn-user') !== undefined) {
@@ -576,6 +635,7 @@ var LoginService = function($http, $state, $cookies) {
 	
 	/**
 	 *	Log the current user out.
+	 *	@param {function} onLogout the function to execute after succesfuly logging out.
 	 */
 	this.logout = function(onLogout) {
 		$cookies.remove('bn-user');
@@ -584,7 +644,9 @@ var LoginService = function($http, $state, $cookies) {
 	
 }
 
+// Register the service.
 angular.module('braunianApp').service('loginService', LoginService)
 
+// Inject the relevant factories and services.
 LoginService.$inject = ['$http', '$state', '$cookies'];
 

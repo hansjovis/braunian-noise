@@ -15,7 +15,9 @@ var session = require('client-sessions');			// for session management.
 
 // connect to mongoDB database on localhost.
 mongoose.connect('mongodb://localhost:27017/braunian-noise/posts', function(err) { 
-	console.log(err);
+	if(err != undefined) {
+		console.log('MongoDB: ' + err.message);
+	}
 });     
 
 // Express configuration.

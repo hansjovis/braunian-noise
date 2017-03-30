@@ -49,6 +49,7 @@ var NewPostController = function($scope) {
 	
 	$scope.row_types = ["text", "header 1", "header 2", "text - image", "image", "image - text"];
 	$scope.current_row_type = "text";
+	$scope.current_row_id = 0;
 	
 	// Model of the current post, for two-way databinding purposes.
 	$scope.post = {
@@ -74,11 +75,23 @@ var NewPostController = function($scope) {
 		console.log($scope.current_row_type);
 		
 		var new_row = {};
+		$scope.current_row_id++;
 		
 		switch($scope.current_row_type) {
 			
 			case "text":
-					new_row = {type:"text", text: ""};				
+					new_row = {
+						id: $scope.current_row_id,
+						type: "text", 
+						text: ""
+					};				
+				break;
+			case "header 1":
+					new_row = {
+						id: $scope.current_row_id,
+						type: "header 1",
+						text: ""
+					};
 				break;
 			default:
 				break;
