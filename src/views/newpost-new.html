@@ -1,7 +1,15 @@
 
 <div>
-	<div class="row">
+	<!-- 
+		The Post Editor is divided into two columns:
+			- The actual editor on the left.
+			- A preview of the post on the right.
+	-->
+	<div class="row">	
 		<div class="col-sm-6">
+			<!--
+				Editor side of the post editor.
+			-->
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h3 class="panel-title">Editor</h3>
@@ -13,10 +21,10 @@
 						<label for="post_img_input" class="col-xs-2 col-form-label"> Header </label>
 						<div class="col-xs-9">
 							<input 
-								name="post_img_input" id="post_img_input" 
+								name="post_img_input" id="post_img_input_header" 
 								type="file" class="form-control-file col-lg-9" aria-label="Title">
 							</input>
-							<button ng-click="upload_header_img()" class="btn btn-default col-lg-3 pull-right">Upload</button>
+							<button ng-click="upload_img('header')" class="btn btn-sm btn-default col-lg-3 pull-right">Upload</button>
 						</div>
 					</div>
 				
@@ -28,56 +36,58 @@
 						</div>
 					</div>
 					
+					<!-- Post categories. -->
+					<div class="form-group row">
+						<label for="post_title_input" class="col-xs-2 col-form-label"> Categories </label>
+						<div class="col-xs-10">
+							<select multiple class="form-control" ng-model="selected_categories">								
+								<option value="{{cat.name}}" ng-repeat="cat in categories">{{cat.name}}</option>
+							</select>
+						</div>
+					</div>
+					
+					<hr>
+					
+					<!-- Content. -->
 					<label>Content</label>
 					<div class="panel panel-primary">
 						<div class="panel-body">
-							<div ng-repeat="content in post.contents" class="row row-content" style="margin-top: 5px;">	
-														
-								<div class="col-sm-10">
-								
-									<a class="btn btn-default">
-										<span class="fa fa-chevron-left"></span>
-									</a>									
-									<label>{{content.type}}</label>
-									
-									<a class="btn btn-default pull-right">
-										<span class="fa fa-chevron-right"></span>
-									</a>									
-									
-									<div ng-switch="content.type">
-										<div ng-switch-when="text">
-											<textarea ng-model="content.text" rows=10 class="form-control" style="width: 100%; padding: 10px;"> </textarea>
-										</div>
-										<div ng-switch-when="header 1">
-											<input type="text" ng-model="content.text" class="form-control" style="width: 100%; padding: 10px;"> </input>
+						
+							<!-- 
+								For every media object contained in the text, 
+								add controls to upload and/or edit it.
+							-->							
+							<label for="images-editor">Media</label>
+							<div id="images-editor">
+								<div ng-repeat="obj in post.content"> 
+									<!-- In the case of an image: add an upload control. -->
+									<div ng-if="obj.type == 'image'">
+										<div class="row">
+											<input 
+												name="post_img_input_{{obj.id}}" id="post_img_input_{{obj.id}}" 
+												type="file" class="form-control-file col-lg-9" aria-label="Title">
+											</input>
+											<div class="col-lg-3">
+												<button class="btn btn-sm btn-default" ng-click="upload_img(obj.id)">Upload</button>
+											</div>																						
 										</div>
 									</div>
-								</div>
-								
-								<div class="col-sm-1">
-											
-									<a class="btn btn-default">
-										<span class="fa fa-trash-o"></span>
-									</a>
 									
-									<a class="btn btn-default" style="margin-top: 20px;">
-										<span class="fa fa-arrow-up"></span>
-									</a>
-									<a class="btn btn-default">
-										<span class="fa fa-arrow-down"></span>
-									</a>
 								</div>
 							</div>
-							<div>
-								<select class="custom-select" ng-model="current_row_type" ng-options="row_type for row_type in row_types">					
-								</select>
-								<a class="btn btn-primary" ng-click="add_row()">
-									<span class="fa fa-plus-square-o"></span> Add Row
-								</a>
-							</div>
+							
+							<!-- 
+								Text Editor. 
+								Contains the actual text of the post.
+								By typing markup instructions like [img], media-objects can be added.
+								Common markdown commands work as well, like '##Header 2', '* unordered list item' and '1. ordered list item'.
+							-->
+							<label for="text-editor">Text</label>
+							<textarea id="text-editor" ng-model="post.content_raw" ng-change="generate_html()" rows=10 class="form-control" style="width: 100%; padding: 10px;"> </textarea>							
 						</div>
 					</div>
 				
+					<!-- Save and cancel buttons. -->
 					<div class="pull-right">
 						<a class="btn btn-default">
 							Cancel
@@ -89,32 +99,54 @@
 				</div>
 			</div>
 		</div>
+		<!--
+			Preview side of the post editor.
+		-->
 		<div class="col-sm-6">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h3 class="panel-title">Preview</h3>
 				</div>
-				<div class="panel-body">
+				<div class="panel-body">					
+
 					<!-- Big header image. -->
-					<div class="post-image">
-						<img id="header_image" src="{{default_header_img_url}}" style="filter: blur(5px);" width="100%"></img>
-						<!-- Title area. -->
-						<h1 class="post-title" style="font-size: 30px;"><b>{{post.title}}</b></h1>
-					</div>
+					<img id="post_img_header" class="post-header-image center-cropped" src="{{default_header_img_url}}" width="100%"></img>
 					
+					<!-- Header area (title, author, categories, date, etc.). -->
+					<div class="post-header">
+						<h1 class="post-title" style="font-size: 30px;"><b>{{post.title}}</b></h1>
+						<!-- Categories. -->	
+						<div>
+							By {{post.author}} on {{post.created_on | date: 'medium'}}
+							
+							<div>
+								<span ng-repeat="cat in selected_categories" class="label label-primary" style="margin: 4px;">
+									{{cat}} 
+								</span>
+							</div>							
+						</div>						
+					</div>							
+														
 					<!-- Post contents. -->
-					<div ng-repeat="content in post.contents">
-						<div ng-switch="content.type">
-							<div ng-switch-when="text">
-								<p>
-									{{content.text}}
-								</p>
-							</div>
-							<div ng-switch-when="header 1">
-								<h4>{{content.text}}</h4>
+					<div class="post-body">						
+						<div ng-repeat="obj in post.content"> 
+							<div ng-switch="obj.type">
+								
+								<!-- Image -->
+								<div ng-switch-when="image">
+										<img id="post_img_{{obj.id}}" class="post-image-full center-block" src="{{obj.source}}" style="width:100%"> </img>
+										<!-- <p class="text-center"> {{obj.caption}} </p> -->							
+								</div>
+							
+								<!-- Default: interpret it as text. -->
+								<div ng-switch-default>
+									<div ng-bind-html="obj.text" class="text-pre-wrap"> </div>
+								</div>
+								
 							</div>
 						</div>
 					</div>
+			
 				</div>
 			</div>
 		</div>

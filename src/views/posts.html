@@ -27,19 +27,24 @@
 
 <div ng-repeat="post in posts">
 	<div class="row bn-post">
-		<img class="col-lg-4" src="images/Sample/242x200.svg"></img>
-		<div class="col-lg-8">
-			<h4> 
-				<a ui-sref="app.post({id : post.id})"> {{post.title}} </a>
-				
+		<img class="hidden-xs col-sm-4" src="images/Sample/242x200.svg"></img>
+		<div class="col-sm-8">
+			<!-- Post title. -->
+			<h4 class="post-preview-title"> 
+				<a ui-sref="app.post({id : post.id})"> {{post.title}} </a>				
 			</h4>
-			<div ng-bind-html="post.content_preview"></div>
+			
+			<!-- Content preview. -->
+			<div ng-bind-html="post.content_preview" class="post-preview-text"></div>
+			
+			<!-- Post footer (like-button, author, date posted etc.). -->
 			<h4> 
 				<a class="label label-info bn-like-button" ng-click="like(post.id)">{{post.likes}} 
 					<i class="fa fa-thumbs-o-up" aria-hidden="true"></i> 
 				</a> 
 				<small style="margin-left: 20px;"> Posted on {{post.date}} by {{post.author}}</small> 					
-			</h4>	
+			</h4>
+			
 			<!-- Admin buttons, only shown when an admin has logged in. -->
 			<div ng-show="user != null" class="btn-group pull-right">
 				<!-- Edit post. -->

@@ -46,20 +46,82 @@
 	text-align: center;
 }
 
-.post-image {
-	position: relative;
-	border-radius: 10px;
-	margin: 5px;
+/* Title of the preview of a post (in e.g. a list of posts). */
+.post-preview-title {
+	font-size: 30px;
+	font-family: 'Lato', sans-serif;
 }
 
-.post-title {
-	position: absolute;
-	top: 35%;
+.post-preview-text {
+	font-size: 16px;
+	font-family: 'Roboto', sans-serif;
+}
+
+/* Centered, cropped to size images. */
+.center-cropped {
+	object-fit: cover; 		/* Let the image cover the area of the image */
+	object-position: center; /* Center the image within the element */
+}
+
+/* Header above a post. */
+.post-header {	
+	margin: 0px;
+	padding-left: 5%;	
+	padding-top: 5px;
+	padding-bottom: 10px;	
+	
+	border-left: 5px solid;
+	border-right: 5px solid;
+	
+	border-color: rgb(200, 200, 200);
+}
+
+/* Header image above a post. */
+.post-header-image {
 	width: 100%;
-	color: white;
-	text-align: center;
+	height: 200px;
+	
+	border-top-left-radius: 20px;
+	border-top-right-radius: 20px;	
+	border-left: 5px solid;
+	border-right: 5px solid;
+	border-color: rgb(200, 200, 200);	
+}
+
+/* Title of a post. */
+.post-title {	
+	text-align: left;	
 	font-size: 75px;
-	background-color: rgba(50, 80, 130, 0.7);
+	font-style: bold;
+	font-family: 'Lato', sans-serif;	
+}
+
+/* Main body of the post. */
+.post-body {
+	padding-top: 10px;
+	padding-left: 20px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	margin-bottom: 20px;
+	
+	font-family: 'Roboto', sans-serif;
+	font-size: 16px;
+	
+	border-bottom-left-radius: 20px;
+	border-bottom-right-radius: 20px;
+	border-left: 5px solid;
+	border-right: 5px solid;	
+	border-color: rgb(200, 200, 200);
+}
+
+.text-pre-wrap {
+	white-space: pre-wrap;
+}
+
+/* Full-width image inside of a post. */
+.post-image-full {
+	max-height: 50%;
+	max-width: 50%;
 }
 
 .post-image-preview {

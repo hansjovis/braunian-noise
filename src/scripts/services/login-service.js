@@ -14,13 +14,13 @@ var LoginService = function($http, $state, $cookies) {
 		// Try to login on the server using the given credentials.
 		$http.post('http://localhost:8080/api/login', credentials).then(
 			// When succesfull
-			function(response) {				
-				if(response.data.name) {
+			function(response) {	
+				if(response.data.username) {
 					// Simple session storage using a cookie,
 					// stores the user's name.
-					$cookies.put('bn-user', response.data.name);
+					$cookies.put('bn-user', response.data.screenname);
 					// Execute the success function.					
-					onSuccess(response.data.name);
+					onSuccess(response.data.screenname);
 				}					
 			}, 
 			// When not...
@@ -56,7 +56,7 @@ var LoginService = function($http, $state, $cookies) {
 }
 
 // Register the service.
-angular.module('braunianApp').service('loginService', LoginService)
+angular.module('braunianApp').service('loginService', LoginService);
 
 // Inject the relevant factories and services.
 LoginService.$inject = ['$http', '$state', '$cookies'];

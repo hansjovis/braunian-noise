@@ -5,13 +5,13 @@
  *	E.g. filtering out the posts not belonging to the current category.
  *	 
  */
-var PostListController = function($scope, postFactory, $stateParams, $cookies, loginService) {
+var PostListController = function($scope, postsService, $stateParams, $cookies, loginService) {
 	
 	// Get the current category from the URL.
 	$scope.current_cat = $stateParams.cat;
 	
 	// Get all the posts for this category.
-	$scope.posts = postFactory.getPosts($scope.current_cat);
+	$scope.posts = postsService.getPosts($scope.current_cat);
 	
 	// Get the logged in user, if there is one 
 	// (used to show and hide controls for adminstrating posts and categories).
@@ -50,4 +50,4 @@ var PostListController = function($scope, postFactory, $stateParams, $cookies, l
 angular.module('braunianApp').controller('PostListController', PostListController);
 
 // Inject the relevant factories and services.
-PostListController.$inject = ['$scope', 'postFactory', '$stateParams', '$cookies', 'loginService'];
+PostListController.$inject = ['$scope', 'postsService', '$stateParams', '$cookies', 'loginService'];

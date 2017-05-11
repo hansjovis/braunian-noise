@@ -13,53 +13,66 @@
 		<!-- Bootstrap, Font-Awesome, Braunian-Noise -->
 		<!-- build:css styles/main.css -->
 		<link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
-		<link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap-theme.min.css">		
+		<link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+		<link rel="stylesheet" href="../bower_components/bootstrap-select/dist/css/bootstrap-select.min.css">	
 		<link rel="stylesheet" href="styles/braunian-noise/braunian-noise.css">
 		<link rel="stylesheet" href="styles/jumbotron-narrow.css">
 		<!-- endbuild -->
+		
+		<!-- FONTS -->
+		<link href="https://fonts.googleapis.com/css?family=Roboto|Lato" rel="stylesheet">
 		
 		<!-- build:css styles/font-awesome.css -->
 		<link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.css">
 		<!-- endbuild -->
 		
-		<!-- Include all the neccessary (Angular) Javascript files. -->
+		<!-- JAVASCRIPT -->		
+		<!-- Include all the neccessary (Angular, Bootstrap) Javascript files. -->	
 		
-		<!-- build:js scripts/libs.js -->	
+		<!-- Angular -->
+		<!-- build:js scripts/angular-lib.js -->	
 		<script src="../bower_components/angular/angular.min.js"></script>
 		<script src="../bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
 		<script src="../bower_components/angular-resource/angular-resource.min.js"></script>
 		<script src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
-		<script src="../bower_components/angular-cookies/angular-cookies.min.js"></script>
-		<!-- endbuild -->	
-		
+		<script src="../bower_components/angular-cookies/angular-cookies.min.js"></script>		
+		<!-- endbuild -->
+
+		<!-- Bootstrap -->
+		<!-- build:js scripts/bootstrap-lib.js -->
+		<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+		<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>	
+		<script src="../bower_components/bootstrap-select/dist/js/bootstrap-select.min.js"></script>	
+		<!-- endbuild -->
+				
+		<!-- Main Braunian-Noise App -->
 		<!-- build:js scripts/app-main.js -->
 		<script src="scripts/app.js"></script>
 		
-		<script src="scripts/controllers.js"></script>
+		<script src="scripts/controllers/index-controller.js"></script>
+		<script src="scripts/controllers/post-controller.js"></script>
 		<script src="scripts/controllers/login-controller.js"></script>
 		<script src="scripts/controllers/new-post-controller.js"></script>
 		<script src="scripts/controllers/post-list-controller.js"></script>
-		<script src="scripts/controllers/navigation-controller.js"></script>
+		<script src="scripts/controllers/navigation-controller.js"></script>		
 		
-		
-		<script src="scripts/services.js"></script>	
-		<script src="scripts/login-service.js"></script>	
+		<script src="scripts/services/login-service.js"></script>	
+		<script src="scripts/services/posts-service.js"></script>	
 		<!-- endbuild -->
 	</head>
 	<body>
+	
 		<div class="container">
 			<!-- These elements will be populated with the required html-code at runtime. -->
 			<div ui-view="header"></div>
 			<div ui-view="whole-page">
 				<div class="row row-content">
-					<div class="col-sm-1" style="min-width: 250px;" ui-view="navigation"></div>
-					<div class="col-sm-9" ui-view="content"></div>
+					<div class="col-md-1" style="min-width: 250px;" ui-view="navigation"></div>
+					<div class="col-md-9" ui-view="content"></div>
 				</div>		
 			</div>
 			<div ui-view="footer"></div>
 		</div>
-	
-
-	
+		
 	</body>
 </html>

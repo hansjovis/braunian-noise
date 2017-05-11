@@ -14,7 +14,7 @@ var session = require('client-sessions');			// for session management.
 // configuration =================
 
 // connect to mongoDB database on localhost.
-mongoose.connect('mongodb://localhost:27017/braunian-noise/posts', function(err) { 
+mongoose.connect('mongodb://localhost:27017/braunian-noise', function(err) { 
 	if(err != undefined) {
 		console.log('MongoDB: ' + err.message);
 	}
@@ -44,7 +44,6 @@ app.use(session({
 var Blogpost = mongoose.model('Post', {
 	title: String,
 	header_img: String,
-	thumbnail: String,
 	categories: Array,
 	author:	String,
 	created_on: String,
@@ -54,7 +53,8 @@ var Blogpost = mongoose.model('Post', {
 
 // User.
 var User = mongoose.model('User', {
-	name: String,
+	username: String,
+	screenname: String,
 	password: String
 });
 
@@ -72,7 +72,7 @@ passport.deserializeUser(function(user, done) {
 passport.use(new LocalStrategy(
 	function(username, password, done) {
 		// Try to find the user with the given username in the DB.
-		User.findOne({ name: username }, 
+		User.findOne({ username: username }, 
 		
 			function (err, user) {				
 				if (err) {
@@ -101,21 +101,6 @@ passport.use(new LocalStrategy(
 // routes ======================================================================
 
 // api ---------------------------------------------------------------------
-
-// register route
-app.get('/api/register',
-	function(req, res) {
-		
-		var password = bcrypt.hashSync('Br@un1anNo1s3');
-		
-		User.create({
-			name: 'hansjovis',
-			password: password
-		});
-		
-		res.redirect('/');
-	}
-);
 
 // login route
 app.post('/api/login',	

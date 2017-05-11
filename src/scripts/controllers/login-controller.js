@@ -26,9 +26,10 @@ var LoginController = function($scope, $stateParams, $state, loginService) {
 		// Log-in using the login service.
 		loginService.login($scope.credentials,
 			// Function to execute after succesful log-in.
-			function(username) {
+			function(screenname) {
+				console.log("Welcom "+screenname+"!");
 				// Go to the blog-post list.
-				$state.go('app.posts_category', 'all_posts');
+				$state.go('app.posts_category', 'all_posts');				
 			},
 			// Function to execute after unsuccesful log-in.
 			function(response) {
