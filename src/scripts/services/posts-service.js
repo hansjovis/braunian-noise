@@ -105,7 +105,7 @@ var PostsService = function($resource, baseURL) {
 			}						
 		}
 	}
-	
+
 	
 }
 

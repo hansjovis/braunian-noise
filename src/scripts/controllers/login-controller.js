@@ -29,7 +29,7 @@ var LoginController = function($scope, $stateParams, $state, loginService) {
 			function(screenname) {
 				console.log("Welcom "+screenname+"!");
 				// Go to the blog-post list.
-				$state.go('app.posts_category', 'all_posts');				
+				$state.go('app.posts_category', {cat : 'all_posts'});				
 			},
 			// Function to execute after unsuccesful log-in.
 			function(response) {

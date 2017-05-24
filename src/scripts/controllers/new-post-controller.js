@@ -3,7 +3,7 @@
  *	 
  *	[Controller description]
  */
-var NewPostController = function($scope, $sanitize, loginService) {
+var NewPostController = function($scope, $sanitize, loginService, newPostsService) {
 	
 	// Mockup of the categories, will be replaced with a call to the backend.
 	$scope.categories = [
@@ -45,44 +45,73 @@ var NewPostController = function($scope, $sanitize, loginService) {
 		}				
 	];
 	
-	$scope.default_header_img_url = "images/Sample/placeholder-image600x300.jpg";
+	var default_img_url = "images/Sample/placeholder-image600x300.jpg";
 		
 	// Model of the current post.
-	$scope.post = {
-		id: 0,		
+	$scope.post = {		
 		title: "",			
-		header_img: {},
+		header_img: "",
 		categories: [],
 		author:	"",
-		created_on: "",
+		created_on: 0,
+		edited_on: 0,
 		likes: 0,
-		content_raw: "",
 		content: []
 	};
 	
 	// Set the default post values:
-	$scope.post.author = loginService.loggedInUser();
-	$scope.post.created_on = Date.now();
+	$scope.post.author 		= loginService.loggedInUser();
+	$scope.post.created_on 	= Date.now();
+	$scope.post.edited_on 	= Date.now();
+	$scope.post.header_img 	= default_img_url;
 	
-	$scope.images = [];	
-	$scope.selected_categories = [];
+	$scope.content_raw = "";
+	$scope.image_urls = {};
 	
-	$scope.upload_img = function(image_id) {
-		
+	/**
+	 *	Uploads an image to the server.
+	 *	The image is taken from the file input element 'post_img_input_[image_id]'.
+	 *	@param{String} image_id -  
+	 */
+	$scope.upload_image = function(image_id) {		
+		// Get the image from the input element.
 		var file = document.getElementById('post_img_input_' + image_id).files[0];
-				
-		var image_url = window.URL.createObjectURL(file);		
 		
-		$scope.images[image_id] = image_url;		
-						
-		document.getElementById('post_img_' + image_id).src = image_url;
-					
-		console.log(file);
+		var image_url = newPostsService.upload_image(file,
+			// On success.
+			function(image_url) {
+				console.log(image_url);
+				if(image_id == 'header') {
+					$scope.post.header_img = image_url;
+				}
+				else {
+					$scope.image_urls[image_id] = image_url;
+				}				
+			},
+			// On error.
+			function(err) {
+				
+			}		
+		);	
 	}	
+	
+	$scope.upload_post = function() {
+		console.log($scope.post);
+		newPostsService.upload_post($scope.post,
+			// Executed when successfuly uploaded the post.
+			function(response) {
+				console.log(response);
+			},
+			function(error) {
+				console.log(error);
+			}
+		
+		);
+	}
 		
 	$scope.generate_html = function() {
 							
-		var html = $scope.post.content_raw;		
+		var html = $scope.content_raw;		
 		
 		// Replace the neccesary markdown tags
 		// with html-ones.
@@ -125,7 +154,7 @@ var NewPostController = function($scope, $sanitize, loginService) {
 						
 		var content = [];
 		
-		var image_id = 0;
+		var image_id = 1;
 		
 		// Generate the content as an array of 
 		// objects: 'text' for normal text,
@@ -137,8 +166,7 @@ var NewPostController = function($scope, $sanitize, loginService) {
 					{
 						id: image_id,
 						type: "image",
-						source: $scope.images[image_id],
-						caption: ""
+						source: $scope.image_urls[image_id]
 					}
 				);					
 				image_id++;
@@ -154,10 +182,7 @@ var NewPostController = function($scope, $sanitize, loginService) {
 			}					
 		}
 		
-		console.log(content);
-		
-		return content;
-		
+		return content;		
 	}
 	
 	/**
@@ -252,4 +277,4 @@ var NewPostController = function($scope, $sanitize, loginService) {
 angular.module('braunianApp').controller('NewPostController', NewPostController);
 
 // Inject the relevant factories and services.
-NewPostController.$inject = ['$scope', '$sanitize', 'loginService'];
+NewPostController.$inject = ['$scope', '$sanitize', 'loginService', 'newPostsService'];
