@@ -60,7 +60,7 @@ var NewPostController = function($scope, $sanitize, loginService, newPostsServic
 	};
 	
 	// Set the default post values:
-	$scope.post.author 		= loginService.loggedInUser();
+	$scope.post.author 		= "";
 	$scope.post.created_on 	= Date.now();
 	$scope.post.edited_on 	= Date.now();
 	$scope.post.header_img 	= default_img_url;

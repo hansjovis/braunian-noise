@@ -24,8 +24,11 @@ var PostListController = function($scope, postsService, $stateParams, $cookies, 
 		// Log out.
 		loginService.logout(
 			// Reload the current page after logging out.
-			function() {
+			function(response) {
 				window.location.reload();
+			},
+			function(response) {
+				console.log(response);
 			}
 		)
 	}

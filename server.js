@@ -8,7 +8,7 @@ const methodOverride = require('method-override'); 	// simulate DELETE and PUT (
 const passport = require('passport');				// passport for logging in.
 const LocalStrategy = require('passport-local');	// local login strategy.
 const bcrypt = require('bcrypt-nodejs');			// for encrypting and decrypting strings (e.g. passwords).
-const session = require('client-sessions');			// for session management.
+const session = require('express-session');			// for session management.
 
 const multer = require('multer');					// for uploading images and other files.
 const fs = require('fs');							// for file system manipulation.
@@ -24,8 +24,15 @@ mongoose.connect('mongodb://localhost:27017/braunian-noise', function(err) {
 });     
 
 // Express configuration.
+
+// Configure session functionality.
+app.use(session({
+  secret: 'random_string_goes_here'  
+}));
+
 app.use(passport.initialize());
 app.use(passport.session());
+
 app.use(express.static(__dirname + '/public'));                 // set the static files location /public/img will be /img for users
 app.use(morgan('dev'));                                         // log every request to the console
 
@@ -35,13 +42,7 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json' })); // parse applica
 
 app.use(methodOverride());
 
-// Configure session functionality.
-app.use(session({
-  cookieName: 'bn-session',
-  secret: 'random_string_goes_here',
-  duration: 30 * 60 * 1000,				// How long the user can stay inactive before the session expires (in milliseconds).
-  activeDuration: 5 * 60 * 1000,		// How long the session duration is updated when the user interacts with the site.
-}));
+
 
 // Configure Multer disk storage procedures,
 // e.g. folder destination and file names.
@@ -86,11 +87,14 @@ var User = mongoose.model('User', {
 // configure local login with passport. ==========
 
 passport.serializeUser(function(user, done) {
-  done(null, user);
+	console.log(user.id);
+	done(null, user.id);
 });
 
-passport.deserializeUser(function(user, done) {
-  done(null, user);
+passport.deserializeUser(function(id, done) {
+	User.findById(id, function(err, user) {
+		done(err, user);
+	});
 });
 
 passport.use(new LocalStrategy(
@@ -122,6 +126,15 @@ passport.use(new LocalStrategy(
 	}
 ));
 
+var get_profile = function(user) {
+	
+	return {
+		id: user._id,
+		username: user.username,
+		screenname: user.screenname
+	}
+}
+
 // routes ======================================================================
 
 // api ---------------------------------------------------------------------
@@ -130,11 +143,13 @@ passport.use(new LocalStrategy(
 app.post('/api/login',	
 	// authenticare using passport.
 	passport.authenticate('local'),	
-	function(req, res) {		
-		console.log(req.user);
+	function(req, res) {
 		if(req.user) {
 			req.session.user = req.user;
-			res.json(req.user);
+			
+			var profile = get_profile(req.user);
+			
+			res.json(profile);
 		}
 		else {
 			res.status(401).send('Invalid username or password.');
@@ -145,16 +160,17 @@ app.post('/api/login',
 // logout route
 app.post('/api/logout', function(req, res) {
 	req.logout();
-	res.status();
+	res.status(200).send('Succesfully logged out!');
 });
 
 // route middleware function that checks whether the user has logged in.
-var is_logged_in = function(req, res, next) {	
+var is_logged_in = function(req, res, next) {
+	
 	if(req.isAuthenticated()) {
 		return next();
 	}
 	else {
-		req.status(401).send('You need to be logged in.');
+		res.status(401).send('You need to be logged in.');
 	}
 }
 

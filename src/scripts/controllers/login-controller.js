@@ -20,14 +20,12 @@ var LoginController = function($scope, $stateParams, $state, loginService) {
 	 *	Log-in function.
 	 */
 	$scope.login = function() {
-		console.log('Logging in!');
-		console.log($scope.credentials);
 		
 		// Log-in using the login service.
 		loginService.login($scope.credentials,
 			// Function to execute after succesful log-in.
 			function(screenname) {
-				console.log("Welcom "+screenname+"!");
+				console.log("Welcome "+screenname+"!");
 				// Go to the blog-post list.
 				$state.go('app.posts_category', {cat : 'all_posts'});				
 			},
