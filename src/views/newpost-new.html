@@ -24,7 +24,7 @@
 								name="post_img_input" id="post_img_input_header" 
 								type="file" class="form-control-file col-lg-9" aria-label="Title">
 							</input>
-							<button ng-click="upload_img('header')" class="btn btn-sm btn-default col-lg-3 pull-right">Upload</button>
+							<button ng-click="upload_image('header')" class="btn btn-sm btn-default col-lg-3 pull-right">Upload</button>
 						</div>
 					</div>
 				
@@ -40,7 +40,7 @@
 					<div class="form-group row">
 						<label for="post_title_input" class="col-xs-2 col-form-label"> Categories </label>
 						<div class="col-xs-10">
-							<select multiple class="form-control" ng-model="selected_categories">								
+							<select multiple class="form-control" ng-model="post.categories">								
 								<option value="{{cat.name}}" ng-repeat="cat in categories">{{cat.name}}</option>
 							</select>
 						</div>
@@ -68,7 +68,7 @@
 												type="file" class="form-control-file col-lg-9" aria-label="Title">
 											</input>
 											<div class="col-lg-3">
-												<button class="btn btn-sm btn-default" ng-click="upload_img(obj.id)">Upload</button>
+												<button class="btn btn-sm btn-default" ng-click="upload_image(obj.id)">Upload</button>
 											</div>																						
 										</div>
 									</div>
@@ -83,7 +83,9 @@
 								Common markdown commands work as well, like '##Header 2', '* unordered list item' and '1. ordered list item'.
 							-->
 							<label for="text-editor">Text</label>
-							<textarea id="text-editor" ng-model="post.content_raw" ng-change="generate_html()" rows=10 class="form-control" style="width: 100%; padding: 10px;"> </textarea>							
+							<textarea id="text-editor" ng-model="content_raw" 
+								ng-change="generate_html()" rows=10 class="form-control" style="width: 100%; padding: 10px;"> 
+							</textarea>							
 						</div>
 					</div>
 				
@@ -92,7 +94,7 @@
 						<a class="btn btn-default">
 							Cancel
 						</a>
-						<a class="btn btn-primary">
+						<a class="btn btn-primary" ng-click="upload_post()">
 							Save
 						</a>
 					</div>
@@ -110,7 +112,7 @@
 				<div class="panel-body">					
 
 					<!-- Big header image. -->
-					<img id="post_img_header" class="post-header-image center-cropped" src="{{default_header_img_url}}" width="100%"></img>
+					<img id="post_img_header" class="post-header-image center-cropped" src="{{post.header_img}}" width="100%"></img>
 					
 					<!-- Header area (title, author, categories, date, etc.). -->
 					<div class="post-header">
@@ -120,7 +122,7 @@
 							By {{post.author}} on {{post.created_on | date: 'medium'}}
 							
 							<div>
-								<span ng-repeat="cat in selected_categories" class="label label-primary" style="margin: 4px;">
+								<span ng-repeat="cat in post.categories" class="label label-primary" style="margin: 4px;">
 									{{cat}} 
 								</span>
 							</div>							
@@ -134,7 +136,7 @@
 								
 								<!-- Image -->
 								<div ng-switch-when="image">
-										<img id="post_img_{{obj.id}}" class="post-image-full center-block" src="{{obj.source}}" style="width:100%"> </img>
+										<img id="post_img_{{obj.id}}" class="post-image-full center-block" src="{{image_urls[obj.id]}}" style="width:100%"> </img>
 										<!-- <p class="text-center"> {{obj.caption}} </p> -->							
 								</div>
 							
